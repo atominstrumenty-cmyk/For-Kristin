@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Приглашение на свидание ❤️</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    /* Живой переливающийся фон */
+    body {
+      background: linear-gradient(-45deg, #0f0c20, #2b1055, #592070, #170f2c);
+      background-size: 400% 400%;
+      animation: gradientBG 12s ease infinite;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .phone-container {
+      width: 100%;
+      max-width: 414px;
+      height: 100vh;
+      max-height: 896px;
+      background: linear-gradient(180deg, rgba(199, 174, 232, 0.35) 0%, rgba(143, 110, 189, 0.45) 100%);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+    @media (min-width: 450px) {
+      .phone-container {
+        height: 844px;
+        border-radius: 44px;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+      }
+    }
+
+    /* Анимированные светящиеся пятна */
+    .glow-orb {
+      position: absolute;
+      width: 250px;
+      height: 250px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,182,255,0.35) 0%, rgba(255,255,255,0) 70%);
+      pointer-events: none;
+      animation: floatOrb 8s ease-in-out infinite alternate;
+    }
+    .orb-1 { top: -50px; left: -50px; }
+    .orb-2 { bottom: -50px; right: -50px; animation-delay: -4s; }
+
+    @keyframes floatOrb {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(30px, 40px) scale(1.2); }
+    }
+
+    /* Экраны с плавными переходами */
+    .screen {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 18px 75px 18px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transform: scale(0.88) translateY(30px);
+      overflow-y: auto;
+      z-index: 2;
+    }
+    .screen.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: scale(1) translateY(0);
+    }
+
+    /* Стикеры котиков */
+    .cat-gif {
+      width: 100px;
+      height: 100px;
+      object-fit: contain;
+      margin-top: 5px;
+      margin-bottom: 8px;
+      filter: drop-shadow(0 8px 16px rgba(0,0,0,0.25));
+      animation: pulseCat 3s ease-in-out infinite alternate;
+    }
+    @keyframes pulseCat {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.05); }
+    }
+
+    h1 {
+      font-size: 22px;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 6px;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+    .subtitle {
+      font-size: 13px;
+      opacity: 0.9;
+      text-align: center;
+      margin-bottom: 14px;
+      line-height: 1.4;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    }
+
+    /* Стекло карточек */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      border-radius: 28px;
+      padding: 20px;
+      width: 100%;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Анимированные кнопки */
+    .btn-main {
+      background: linear-gradient(135deg, #ffffff 0%, #f0e6ff 100%);
+      color: #6c3eb8;
+      border: none;
+      padding: 14px 24px;
+      border-radius: 30px;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.2), inset 0 2px 4px rgba(255,255,255,0.8);
+      transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      width: 100%;
+      margin-top: 10px;
+      text-align: center;
+    }
+    .btn-main:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+    }
+    .btn-main:active {
+      transform: scale(0.96);
+    }
+
+    /* Радио-выбор даты */
+    .date-option {
+      background: rgba(255, 255, 255, 0.2);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 20px;
+      padding: 14px 18px;
+      width: 100%;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+    .date-option.selected {
+      background: rgba(255, 255, 255, 0.45);
+      border-color: #fff;
+      box-shadow: 0 0 15px rgba(255,255,255,0.4);
+    }
+    .date-option .radio-circle {
+      width: 22px;
+      height: 22px;
+      border: 2px solid rgba(255, 255, 255, 0.8);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .date-option.selected .radio-circle::after {
+      content: '';
+      width: 10px;
+      height: 10px;
+      background: #fff;
+      border-radius: 50%;
+    }
+
+    /* Сетка выбора категорий */
+    .activity-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      width: 100%;
+      margin-bottom: 14px;
+    }
+    .activity-card {
+      background: rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(12px);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 20px;
+      padding: 14px 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .activity-card .icon {
+      font-size: 30px;
+      margin-bottom: 4px;
+      transition: transform 0.3s ease;
+    }
+    .activity-card span {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+    .activity-card.selected {
+      background: rgba(255, 255, 255, 0.45);
+      border-color: #fff;
+      transform: scale(1.04);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2), 0 0 15px rgba(255,255,255,0.5);
+    }
+    .activity-card.selected .icon {
+      transform: scale(1.15) rotate(-5deg);
+    }
+
+    /* Список подкатегорий */
+    .sub-list {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 14px;
+      max-height: 360px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    .sub-item {
+      background: rgba(255, 255, 255, 0.2);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 16px;
+      padding: 12px 16px;
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+    .sub-item.selected {
+      background: rgba(255, 255, 255, 0.5);
+      border-color: #fff;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.15), 0 0 10px rgba(255,255,255,0.4);
+      transform: scale(1.01);
+    }
+
+    /* Таймер */
+    .timer-container {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+    .timer-box {
+      background: rgba(255, 255, 255, 0.22);
+      backdrop-filter: blur(10px);
+      border-radius: 14px;
+      flex: 1;
+      padding: 8px 2px;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+    }
+    .timer-val {
+      font-size: 18px;
+      font-weight: 800;
+      line-height: 1;
+    }
+    .timer-label {
+      font-size: 9px;
+      opacity: 0.85;
+      margin-top: 3px;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    /* Инфо карточки */
+    .info-card {
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      width: 100%;
+      padding: 8px 14px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    .info-card .icon { font-size: 18px; }
+    .info-card .details { display: flex; flex-direction: column; text-align: left; }
+    .info-card .tag { font-size: 9px; opacity: 0.75; font-weight: 700; letter-spacing: 0.5px; }
+    .info-card .val { font-size: 12px; font-weight: 700; }
+
+    /* Слайдер фото */
+    .slider-wrapper {
+      width: 100%;
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      margin-top: 4px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+      border: 2px solid rgba(255, 255, 255, 0.4);
+      height: 140px;
+    }
+    .slider-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: opacity 0.3s ease;
+    }
+    .slider-dots {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 5px;
+      z-index: 5;
+    }
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.5);
+      transition: all 0.3s ease;
+    }
+    .dot.active {
+      background: #fff;
+      width: 14px;
+      border-radius: 10px;
+    }
+    .slider-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.35);
+      backdrop-filter: blur(5px);
+      border: none;
+      color: #fff;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      font-size: 14px;
+      cursor: pointer;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .slider-btn.prev { left: 8px; }
+    .slider-btn.next { right: 8px; }
+
+    /* P.S. Текст от себя */
+    .ps-note {
+      margin-top: 10px;
+      font-size: 10px;
+      opacity: 0.85;
+      font-style: italic;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.15);
+      padding: 6px 12px;
+      border-radius: 12px;
+      border: 1px dashed rgba(255, 255, 255, 0.3);
+      width: 100%;
+      line-height: 1.3;
+    }
+
+    /* Анимированное супер-признание в конце */
+    .love-banner {
+      margin-top: 12px;
+      width: 100%;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 800;
+      line-height: 1.4;
+      background: linear-gradient(90deg, #ff71ce, #ffe869, #b983ff, #ff71ce);
+      background-size: 300% 300%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: rainbowGlow 4s linear infinite, floatLove 3s ease-in-out infinite alternate;
+      text-shadow: 0 0 20px rgba(255, 113, 206, 0.6);
+      padding: 4px 6px;
+    }
+
+    @keyframes rainbowGlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes floatLove {
+      0% { transform: translateY(0) scale(0.98); }
+      100% { transform: translateY(-4px) scale(1.02); }
+    }
+
+    /* Виджет аудио */
+    .music-widget {
+      position: absolute;
+      bottom: 18px;
+      left: 18px;
+      z-index: 30;
+      background: rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    }
+
+    /* Анимация летящих сердец */
+    .heart-bg {
+      position: absolute;
+      pointer-events: none;
+      animation: rise 3.5s linear infinite;
+      font-size: 18px;
+      opacity: 0.7;
+      z-index: 1;
+    }
+    @keyframes rise {
+      0% { transform: translateY(100vh) scale(0.6) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(-10vh) scale(1.3) rotate(360deg); opacity: 0; }
+    }
+  </style>
+</head>
+<body onclick="enableAudioOnFirstTouch()">
+
+<div id="hearts-container"></div>
+
+<div class="phone-container">
+  <div class="glow-orb orb-1"></div>
+  <div class="glow-orb orb-2"></div>
+
+  <!-- Плеер музыки -->
+  <div class="music-widget" onclick="toggleAudio(event)">
+    <span id="mIcon">🎵</span>
+  </div>
+
+  <!-- ШАГ 1: Интрига -->
+  <div class="screen active" id="s1">
+    <img src="https://media.tenor.com/gU21DhLq520AAAAi/peachcat-cat.gif" class="cat-gif" alt="Котик">
+    <h1>Не хочешь провести<br>время вместе? 💖</h1>
+    <p class="subtitle">У меня есть кое-что особенное для нас с тобой...</p>
+    
+    <button class="btn-main" onclick="nextScreen(2)">Да, с удовольствием! 😍</button>
+    <button class="btn-main" id="btn-no" style="background: rgba(255,255,255,0.25); color: #fff;" onclick="swapNoBtn()">Хмм, подумаю... 🙈</button>
+  </div>
+
+  <!-- ШАГ 2: Согласилась! -->
+  <div class="screen" id="s2">
+    <img src="https://media.tenor.com/yG162fB125AAAAAi/peach-and-goma-hug.gif" class="cat-gif" style="width:110px; height:110px;" alt="Обнимашки">
+    <h1>Ура-а-а! Ты согласилась! 🥳✨</h1>
+    <p class="subtitle">Я так рад! Теперь давай вместе выберем всё самое интересное...</p>
+    
+    <button class="btn-main" onclick="nextScreen(3)">Спланировать ✨</button>
+  </div>
+
+  <!-- ШАГ 3: Выбор времени -->
+  <div class="screen" id="s3">
+    <div class="glass-card">
+      <img src="photo1.jpg" onerror="this.onerror=null; this.src='https://media.tenor.com/OH5fN6dO7Y0AAAAi/peach-goma.gif';" style="width:100px; height:100px; border-radius:20px; object-fit:cover; margin-bottom:10px;" alt="Фото">
+      
+      <h2>Когда тебе удобно? 🗓️</h2>
+      <p class="subtitle" style="margin-bottom:12px;">Выбери удобный день и время</p>
+
+      <div class="date-option selected" id="opt1" onclick="selectDateOption(1, '26 сентября 2026', '15:00', '2026-09-26T15:00:00')">
+        <div style="text-align:left;">
+          <div style="font-weight:700; font-size:14px;">26 сентября 2026 г.</div>
+          <div style="font-size:12px; opacity:0.8;">15:00</div>
+        </div>
+        <div class="radio-circle"></div>
+      </div>
+
+      <div class="date-option" id="opt2" onclick="selectDateOption(2, '27 сентября 2026', '17:00', '2026-09-27T17:00:00')">
+        <div style="text-align:left;">
+          <div style="font-weight:700; font-size:14px;">27 сентября 2026 г.</div>
+          <div style="font-size:12px; opacity:0.8;">17:00</div>
+        </div>
+        <div class="radio-circle"></div>
+      </div>
+
+      <button class="btn-main" onclick="nextScreen(4)">Дальше 💫</button>
+    </div>
+  </div>
+
+  <!-- ШАГ 4: Главная категория -->
+  <div class="screen" id="s4">
+    <img src="https://media.tenor.com/OH5fN6dO7Y0AAAAi/peach-goma.gif" class="cat-gif" alt="Котики">
+    <h1>Чем займёмся? 😊</h1>
+    <p class="subtitle">Выбирай, к чему больше лежит душа</p>
+
+    <div class="activity-grid">
+      <div class="activity-card" onclick="openSubCategory('Кино 🎬')">
+        <span class="icon">🎬</span>
+        <span>Кино</span>
+      </div>
+      <div class="activity-card" onclick="openSubCategory('Прогулка 🌳')">
+        <span class="icon">🌳</span>
+        <span>Прогулка</span>
+      </div>
+      <div class="activity-card" onclick="openSubCategory('Покатушка 🏍️')">
+        <span class="icon">🏍️</span>
+        <span>Покатушка</span>
+      </div>
+      <div class="activity-card" onclick="openSubCategory('Отдых на Природе 🧺')">
+        <span class="icon">🧺</span>
+        <span>Природа</span>
+      </div>
+      <div class="activity-card" onclick="openSubCategory('Бар 🍸')">
+        <span class="icon">🍸</span>
+        <span>Бар</span>
+      </div>
+      <div class="activity-card selected" onclick="openSubCategory('Покушаем 🥐')">
+        <span class="icon">🥐</span>
+        <span>Покушаем</span>
+      </div>
+    </div>
+
+    <button class="btn-main" onclick="openSubCategory(chosenCategory)">Выбрать детали →</button>
+  </div>
+
+  <!-- ШАГ 5: Подкатегории без авто -->
+  <div class="screen" id="s5">
+    <img src="https://media.tenor.com/kZ4m_829_0AAAAAi/mocha-bear.gif" class="cat-gif" style="width:85px; height:85px;" alt="Котик">
+    <h1 id="sub-title">А что именно? 😋</h1>
+    <p class="subtitle" id="sub-desc">Выбери конкретный вариант</p>
+
+    <div class="sub-list" id="sub-container">
+      <!-- Заполняется из JS -->
+    </div>
+
+    <button class="btn-main" onclick="finishSelection()">Всё готово! ✨</button>
+  </div>
+
+  <!-- ШАГ 6: Финал -->
+  <div class="screen" id="s6">
+    <img src="https://media.tenor.com/kZ4m_829_0AAAAAi/mocha-bear.gif" class="cat-gif" style="width:70px; height:70px; margin-top:0;" alt="Финал котик">
+    <h1>Ура! Это свидание 💛</h1>
+    <p class="subtitle" id="final-sub" style="margin-bottom:8px;">Жду тебя!</p>
+
+    <!-- Обратный отсчёт -->
+    <div class="timer-container">
+      <div class="timer-box">
+        <div class="timer-val" id="t-days">0</div>
+        <div class="timer-label">дней</div>
+      </div>
+      <div class="timer-box">
+        <div class="timer-val" id="t-hours">0</div>
+        <div class="timer-label">часов</div>
+      </div>
+      <div class="timer-box">
+        <div class="timer-val" id="t-mins">0</div>
+        <div class="timer-label">минут</div>
+      </div>
+      <div class="timer-box">
+        <div class="timer-val" id="t-secs">0</div>
+        <div class="timer-label">секунд</div>
+      </div>
+    </div>
+
+    <!-- Инфо карточки -->
+    <div class="info-card">
+      <span class="icon">📅</span>
+      <div class="details">
+        <span class="tag">КОГДА</span>
+        <span class="val" id="final-date">26 сентября 2026</span>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <span class="icon">🕒</span>
+      <div class="details">
+        <span class="tag">ВО СКОЛЬКО</span>
+        <span class="val" id="final-time">15:00</span>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <span class="icon">🎯</span>
+      <div class="details">
+        <span class="tag">ЧТО ПЛАНИРУЕМ</span>
+        <span class="val" id="final-act">Покушаем 🥐</span>
+      </div>
+    </div>
+
+    <!-- Галерея фото -->
+    <div class="slider-wrapper">
+      <button class="slider-btn prev" onclick="prevSlide()">‹</button>
+      <img id="slide-img" src="photo1.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=500';" class="slider-img" alt="Фото">
+      <button class="slider-btn next" onclick="nextSlide()">›</button>
+      
+      <div class="slider-dots" id="dots-container"></div>
+    </div>
+
+    <!-- P.S. Записка -->
+    <div class="ps-note">
+      P.S. Старался, сам писал код, чтобы отправить тебе это приглашение ❤️
+    </div>
+
+    <!-- Анимированное красивое признание в самом конце -->
+    <div class="love-banner">
+      Я очень сильно тебя люблю, обожаю проводить время с тобой❤️
+    </div>
+  </div>
+
+</div>
+
+<!-- Аудио трек -->
+<audio id="bg-music" playsinline preload="auto">
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+  let chosenDate = "26 сентября 2026";
+  let chosenTime = "15:00";
+  let chosenISO = "2026-09-26T15:00:00";
+  let chosenCategory = "Покушаем 🥐";
+  let chosenSubDetail = "Пицца 🍕";
+
+  // Категории БЕЗ авто
+  const subData = {
+    'Кино 🎬': {
+      title: "Какой жанр кино? 🍿",
+      desc: "Что покрошим под хруст попкорна?",
+      items: [
+        "Ужастик / Хоррор 👻",
+        "Комедия / Юмор 😂",
+        "Боевик / Экшен 💥",
+        "Фантастика / Сай-Фай 🚀",
+        "Драма / Мелодрама 🥺",
+        "Мультфильмы / Аниме 🎨",
+        "Детектив / Триллер 🔍"
+      ]
+    },
+    'Покатушка 🏍️': {
+      title: "Куда покатим на мотоцикле? 🏍️💨",
+      desc: "Выбирай маршрут для байка",
+      items: [
+        "На эндуро в горах ⛰️🏍️",
+        "Покататься по вечернему городу 🌆🏍️",
+        "Заехать на красивую смотровую площадочку 🏁",
+        "Проехаться с ветерком и музыкой 🎧🏍️"
+      ]
+    },
+    'Прогулка 🌳': {
+      title: "Где погуляем? 🌄",
+      desc: "Выбирай место для прогулки",
+      items: [
+        "Пешком в горах 🏔️🥾",
+        "Поехать в город погулять 🏙️",
+        "В тихом и уютном парке 🌲",
+        "Набережная / У воды 🌊"
+      ]
+    },
+    'Покушаем 🥐': {
+      title: "Что будем кушать? 🍕",
+      desc: "Выбери любимое блюдо",
+      items: [
+        "Сочная пицца 🍕",
+        "Суши & Роллы 🍣",
+        "Китайская кухня 🥡",
+        "Вкусные десерты & Кофе ☕🍰",
+        "Сочные бургеры 🍔"
+      ]
+    },
+    'Отдых на Природе 🧺': {
+      title: "Как отдохнем на природе? 🍃",
+      desc: "Выбирай формат отдыха",
+      items: [
+        "Пикник у реки 🌊",
+        "Лагерь с костром 🏕️",
+        "Уютная беседка 🌲"
+      ]
+    },
+    'Бар 🍸': {
+      title: "Какой бар выберем? 🍹",
+      desc: "Какое настроение на вечер?",
+      items: [
+        "Коктейльный бар 🍹",
+        "Уютный паб 🍺",
+        "Караоке бар 🎤"
+      ]
+    }
+  };
+
+ const audio = document.getElementById('bg-music');
+  let audioStarted = false;
+
+  function startAudio() {
+    if (!audioStarted && audio) {
+      audio.play().then(() => {
+        audioStarted = true;
+        const icon = document.getElementById('mIcon');
+        if (icon) icon.innerText = "🎶";
+      }).catch(err => {
+        console.log("Автовоспроизведение заблокировано:", err);
+      });
+    }
+  }
+
+  // Запуск звука при первом же касании экрана
+  document.addEventListener('touchstart', startAudio, { once: true });
+  document.addEventListener('click', startAudio, { once: true });
+
+  function enableAudioOnFirstTouch() {
+    startAudio();
+  }
+
+  function toggleAudio(e) {
+    if (e) e.stopPropagation();
+    if (!audio) return;
+    
+    if (audio.paused) {
+      audio.play();
+      document.getElementById('mIcon').innerText = "🎶";
+      audioStarted = true;
+    } else {
+      audio.pause();
+      document.getElementById('mIcon').innerText = "🔇";
+    }
+  }
+
+  function nextScreen(num) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('s' + num).classList.add('active');
+  }
+
+  // Шуточная кнопка
+  let noCount = 0;
+  function swapNoBtn() {
+    const btn = document.getElementById('btn-no');
+    noCount++;
+    if(noCount === 1) {
+      btn.innerText = "Ну уж нет, выбирай ДА! 😉";
+    } else {
+      nextScreen(2);
+    }
+  }
+
+  function selectDateOption(optNum, dateStr, timeStr, isoStr) {
+    document.querySelectorAll('.date-option').forEach(o => o.classList.remove('selected'));
+    document.getElementById('opt' + optNum).classList.add('selected');
+    chosenDate = dateStr;
+    chosenTime = timeStr;
+    chosenISO = isoStr;
+  }
+
+  function openSubCategory(catName) {
+    chosenCategory = catName;
+    
+    document.querySelectorAll('.activity-card').forEach(c => {
+      c.classList.remove('selected');
+      if(c.innerText.includes(catName.split(' ')[0])) {
+        c.classList.add('selected');
+      }
+    });
+
+    const data = subData[catName] || subData['Покушаем 🥐'];
+    document.getElementById('sub-title').innerText = data.title;
+    document.getElementById('sub-desc').innerText = data.desc;
+
+    const container = document.getElementById('sub-container');
+    container.innerHTML = '';
+
+    data.items.forEach((item, index) => {
+      const div = document.createElement('div');
+      div.className = 'sub-item' + (index === 0 ? ' selected' : '');
+      div.innerHTML = `<span>${item}</span> <span>✨</span>`;
+      div.onclick = function() {
+        document.querySelectorAll('.sub-item').forEach(si => si.classList.remove('selected'));
+        div.classList.add('selected');
+        chosenSubDetail = item;
+      };
+      container.appendChild(div);
+    });
+
+    chosenSubDetail = data.items[0];
+    nextScreen(5);
+  }
+
+  function finishSelection() {
+    const fullAct = `${chosenCategory} (${chosenSubDetail})`;
+    document.getElementById('final-date').innerText = chosenDate;
+    document.getElementById('final-time').innerText = chosenTime;
+    document.getElementById('final-act').innerText = fullAct;
+    document.getElementById('final-sub').innerText = `Жду тебя ${chosenDate} в ${chosenTime}. Нас ждёт ${fullAct}!`;
+
+    initTimer();
+    initSlider();
+    nextScreen(6);
+  }
+
+  // Обратный отсчёт
+  function initTimer() {
+    const targetDate = new Date(chosenISO);
+    function update() {
+      const now = new Date();
+      const diff = targetDate - now;
+
+      if (diff <= 0) {
+        document.getElementById('t-days').innerText = "0";
+        document.getElementById('t-hours').innerText = "0";
+        document.getElementById('t-mins').innerText = "0";
+        document.getElementById('t-secs').innerText = "0";
+        return;
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const mins = Math.floor((diff / 1000 / 60) % 60);
+      const secs = Math.floor((diff / 1000) % 60);
+
+      document.getElementById('t-days').innerText = days;
+      document.getElementById('t-hours').innerText = hours;
+      document.getElementById('t-mins').innerText = mins;
+      document.getElementById('t-secs').innerText = secs;
+    }
+    update();
+    setInterval(update, 1000);
+  }
+
+  // Слайдер фото
+  const photos = ['photo1', 'photo2', 'photo3', 'gallery1', 'gallery2'];
+  let currentSlide = 0;
+
+  function initSlider() {
+    const dotsWin = document.getElementById('dots-container');
+    dotsWin.innerHTML = '';
+    photos.forEach((_, i) => {
+      const dot = document.createElement('div');
+      dot.className = 'dot' + (i === 0 ? ' active' : '');
+      dotsWin.appendChild(dot);
+    });
+    showSlide(0);
+  }
+
+  function showSlide(index) {
+    currentSlide = (index + photos.length) % photos.length;
+    const img = document.getElementById('slide-img');
+    img.style.opacity = '0.3';
+    
+    setTimeout(() => {
+      img.src = photos[currentSlide] + '.jpg';
+      img.onerror = function() { 
+        this.src = photos[currentSlide] + '.png'; 
+      };
+      img.style.opacity = '1';
+    }, 150);
+
+    const dots = document.querySelectorAll('.dot');
+    dots.forEach((d, i) => {
+      d.className = 'dot' + (i === currentSlide ? ' active' : '');
+    });
+  }
+
+  function nextSlide() { showSlide(currentSlide + 1); }
+  function prevSlide() { showSlide(currentSlide - 1); }
+
+  // Сердечки на фоне
+  setInterval(() => {
+    const heart = document.createElement('div');
+    heart.className = 'heart-bg';
+    heart.innerText = ['❤️', '💖', '✨', '🌸', '💫'][Math.floor(Math.random() * 5)];
+    heart.style.left = Math.random() * 100 + 'vw';
+    heart.style.animationDuration = (Math.random() * 2 + 2.5) + 's';
+    document.getElementById('hearts-container').appendChild(heart);
+    setTimeout(() => heart.remove(), 4000);
+  }, 450);
+</script>
+
+</body>
+</html>
